@@ -1,0 +1,47 @@
+package com.leolab.zerosys.services.auth.filter;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 管理后台身份认证(登录)拦截器
+ */
+public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    public static final String M_B_AUTHENTICATION_URL = "/mb/authentication"; //管理后台登录url
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+
+
+    public MBAuthenticationFilter() {
+        super(new AntPathRequestMatcher(M_B_AUTHENTICATION_URL, "POST"));
+    }
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request,
+                                                HttpServletResponse response) throws AuthenticationException {
+        if (!request.getMethod().equals(HttpMethod.POST.name())) {
+            throw new AuthenticationServiceException(
+                    "Authentication request method not supported: " + request.getMethod());
+        }
+
+        String username = request.getParameter(USERNAME);
+        String password =  request.getParameter(PASSWORD);
+
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            throw new AuthenticationServiceException(
+                    "用户名或密码不能为空");
+        }
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        usernamePasswordAuthenticationToken.setDetails(authenticationDetailsSource.buildDetails(request));
+        return this.getAuthenticationManager().authenticate(usernamePasswordAuthenticationToken);
+    }
+}
