@@ -1,7 +1,7 @@
-package com.leolab.zerosys.services.auth.filter;
+package com.leolab.zerosys.services.auth.authentication.filter;
 
 import com.leolab.zerosys.common.constant.FailMsgEnum;
-import com.leolab.zerosys.services.auth.authenticationtoken.MBAuthenticationToken;
+import com.leolab.zerosys.services.auth.authentication.token.MBAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

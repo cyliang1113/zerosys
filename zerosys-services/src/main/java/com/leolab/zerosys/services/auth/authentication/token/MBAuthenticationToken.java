@@ -1,4 +1,4 @@
-package com.leolab.zerosys.services.auth.authenticationtoken;
+package com.leolab.zerosys.services.auth.authentication.token;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

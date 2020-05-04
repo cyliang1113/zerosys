@@ -1,7 +1,7 @@
-package com.leolab.zerosys.services.auth.authenticationprovider;
+package com.leolab.zerosys.services.auth.authentication.provider;
 
 import com.leolab.zerosys.common.utils.R;
-import com.leolab.zerosys.services.auth.authenticationtoken.MBAuthenticationToken;
+import com.leolab.zerosys.services.auth.authentication.token.MBAuthenticationToken;
 import com.leolab.zerosys.services.pm.dto.PermissionDTO;
 import com.leolab.zerosys.services.pm.service.PermissionManageService;
 import com.leolab.zerosys.services.uc.dto.UserDTO;
@@ -9,7 +9,6 @@ import com.leolab.zerosys.services.uc.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

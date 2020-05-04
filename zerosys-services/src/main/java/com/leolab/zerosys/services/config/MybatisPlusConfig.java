@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
  * mybatis plus配置
  */
 @Configuration
-@MapperScan("com.leolab.zerosys.services.uc.mapper")
+@MapperScan({"com.leolab.zerosys.services.uc.mapper", "com.leolab.zerosys.services.pm.mapper"})
 public class MybatisPlusConfig {
 
 }
