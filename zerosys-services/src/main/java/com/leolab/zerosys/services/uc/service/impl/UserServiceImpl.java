@@ -10,6 +10,8 @@ import com.leolab.zerosys.services.uc.entity.User;
 import com.leolab.zerosys.services.uc.mapper.UserMapper;
 import com.leolab.zerosys.services.uc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +52,8 @@ public class UserServiceImpl implements UserService {
     public R<UserDTO> usernamePasswordVerify(String username, String password) {
         User userByUsernameInner = getUserByUsernameInner(username);
         if (userByUsernameInner != null) {
-            if (password.equals(userByUsernameInner.getPassword())) {
+            PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
+            if (passwordEncoder.matches(password, userByUsernameInner.getPassword())) {
                 UserDTO userDTO = BeanUtils.copyObject(userByUsernameInner, UserDTO.class);
                 return new R(userDTO);
             }

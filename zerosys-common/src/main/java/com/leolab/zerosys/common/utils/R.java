@@ -16,7 +16,7 @@ public class R<T> implements Serializable {
 
     private String msg;
 
-    private Object data;
+    private T data;
 
     public R() {
     }

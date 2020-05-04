@@ -1,10 +1,10 @@
 package com.leolab.zerosys.services.auth.filter;
 
 import com.leolab.zerosys.common.constant.FailMsgEnum;
+import com.leolab.zerosys.services.auth.authenticationtoken.MBAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -29,6 +29,8 @@ public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilt
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
+        logger.info("MBAuthenticationFilter start ...");
+
         if (!request.getMethod().equals(HttpMethod.POST.name())) {
             throw new AuthenticationServiceException(
                     "Authentication request method not supported: " + request.getMethod());
@@ -40,8 +42,8 @@ public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilt
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             throw new AuthenticationServiceException(FailMsgEnum.username_or_password_not_empty.getMsg());
         }
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-        usernamePasswordAuthenticationToken.setDetails(authenticationDetailsSource.buildDetails(request));
-        return this.getAuthenticationManager().authenticate(usernamePasswordAuthenticationToken);
+        MBAuthenticationToken mbAuthenticationToken = new MBAuthenticationToken(username, password);
+        mbAuthenticationToken.setDetails(authenticationDetailsSource.buildDetails(request));
+        return this.getAuthenticationManager().authenticate(mbAuthenticationToken);
     }
 }
