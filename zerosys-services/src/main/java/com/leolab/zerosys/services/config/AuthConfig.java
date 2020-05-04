@@ -33,19 +33,14 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
         http.apply(new SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
             @Override
             public void configure(HttpSecurity builder) throws Exception {
-                MBAuthenticationFilter mbAuthenticationFilter = getMBAuthenticationFilter();
-                mbAuthenticationFilter.setAuthenticationManager(builder.getSharedObject(AuthenticationManager.class));
+                MBAuthenticationFilter mbAuthenticationFilter = new MBAuthenticationFilter();
+                mbAuthenticationFilter.setAuthenticationManager(authenticationManager());
 
                 builder.addFilterAfter(mbAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                         .authenticationProvider(getMBAuthenticationProvider());
                 authenticationManager();
             }
         });
-    }
-
-    @Bean
-    public MBAuthenticationFilter getMBAuthenticationFilter() {
-        return new MBAuthenticationFilter();
     }
 
     @Bean
