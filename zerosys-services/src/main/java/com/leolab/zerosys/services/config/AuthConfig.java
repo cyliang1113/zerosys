@@ -2,16 +2,14 @@ package com.leolab.zerosys.services.config;
 
 import com.leolab.zerosys.services.auth.authentication.filter.MBAuthenticationFilter;
 import com.leolab.zerosys.services.auth.authentication.provider.MBAuthenticationProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
@@ -24,6 +22,9 @@ import java.util.List;
 @EnableWebSecurity
 public class AuthConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private List<AuthenticationProvider> providers;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -34,28 +35,24 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .disable();
-        http.apply(new SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
-            @Override
-            public void configure(HttpSecurity builder) throws Exception {
-                                builder.addFilterAfter(getMBAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                        .authenticationProvider(getMBAuthenticationProvider());
-                authenticationManager();
-            }
-        });
+        http.addFilterAfter(mBAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.authenticationProvider(mBAuthenticationProvider());
     }
 
     @Bean
-    public AuthenticationProvider getMBAuthenticationProvider() {
+    public AuthenticationProvider mBAuthenticationProvider() {
         return new MBAuthenticationProvider();
     }
 
     @Bean
-    public AuthenticationManager getAuthenticationManager(List<AuthenticationProvider> providers) {
+    public ProviderManager providerManager() {
         return new ProviderManager(providers);
     }
 
     @Bean
-    public MBAuthenticationFilter getMBAuthenticationFilter() {
-        return new MBAuthenticationFilter();
+    public MBAuthenticationFilter mBAuthenticationFilter() {
+        MBAuthenticationFilter mbAuthenticationFilter = new MBAuthenticationFilter();
+        mbAuthenticationFilter.setAuthenticationManager(providerManager());
+        return mbAuthenticationFilter;
     }
 }
