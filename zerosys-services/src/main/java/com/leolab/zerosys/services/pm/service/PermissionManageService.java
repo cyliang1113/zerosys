@@ -13,8 +13,7 @@ import java.util.List;
  * @author leo
  * @since 2020-05-03
  */
-public interface PermissionService {
+public interface PermissionManageService {
 
-    @Transactional
-    List<PermissionDTO> getInterfacePermissionListByPermissionIdList(List<Integer> permissionIdList);
+    List<PermissionDTO> getInterfacePermissionListByUserId(Integer userId);
 }

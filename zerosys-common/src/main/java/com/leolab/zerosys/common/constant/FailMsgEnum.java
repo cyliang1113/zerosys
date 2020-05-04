@@ -9,6 +9,7 @@ public enum FailMsgEnum {
 
 
     username_or_password_mistake(10002, "用户名或密码错误"),
+    username_or_password_not_empty(10002, "用户名或密码不能为空"),
 
     ;
 

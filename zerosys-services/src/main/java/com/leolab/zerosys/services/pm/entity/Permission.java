@@ -3,6 +3,7 @@ package com.leolab.zerosys.services.pm.entity;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.leolab.zerosys.common.BaseEntity;
+import com.leolab.zerosys.services.pm.constant.PermissionConstant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 
             /**
             * 权限类型(menu, button, interface)
+             * @see PermissionConstant.PermissionTypeEnum
             */
     private String type;
 

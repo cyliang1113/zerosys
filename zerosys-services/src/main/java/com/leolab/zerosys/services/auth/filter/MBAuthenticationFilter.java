@@ -1,5 +1,6 @@
 package com.leolab.zerosys.services.auth.filter;
 
+import com.leolab.zerosys.common.constant.FailMsgEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 管理后台身份认证(登录)拦截器
+ * 管理后台身份认证(登录) Filter
  */
 public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     public static final String M_B_AUTHENTICATION_URL = "/mb/authentication"; //管理后台登录url
@@ -37,8 +38,7 @@ public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilt
         String password =  request.getParameter(PASSWORD);
 
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            throw new AuthenticationServiceException(
-                    "用户名或密码不能为空");
+            throw new AuthenticationServiceException(FailMsgEnum.username_or_password_not_empty.getMsg());
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         usernamePasswordAuthenticationToken.setDetails(authenticationDetailsSource.buildDetails(request));

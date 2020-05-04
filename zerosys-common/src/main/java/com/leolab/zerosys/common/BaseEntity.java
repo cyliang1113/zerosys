@@ -6,5 +6,5 @@ import java.io.Serializable;
 
 @Data
 public abstract class BaseEntity implements Serializable {
-    private Long id;
+    private Integer id;
 }
