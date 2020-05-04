@@ -5,12 +5,16 @@ import com.leolab.zerosys.services.auth.authentication.provider.MBAuthentication
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.List;
 
 
 /**
@@ -33,10 +37,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
         http.apply(new SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
             @Override
             public void configure(HttpSecurity builder) throws Exception {
-                MBAuthenticationFilter mbAuthenticationFilter = new MBAuthenticationFilter();
-                mbAuthenticationFilter.setAuthenticationManager(authenticationManager());
-
-                builder.addFilterAfter(mbAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                                builder.addFilterAfter(getMBAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                         .authenticationProvider(getMBAuthenticationProvider());
                 authenticationManager();
             }
@@ -44,7 +45,17 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public MBAuthenticationProvider getMBAuthenticationProvider() {
+    public AuthenticationProvider getMBAuthenticationProvider() {
         return new MBAuthenticationProvider();
+    }
+
+    @Bean
+    public AuthenticationManager getAuthenticationManager(List<AuthenticationProvider> providers) {
+        return new ProviderManager(providers);
+    }
+
+    @Bean
+    public MBAuthenticationFilter getMBAuthenticationFilter() {
+        return new MBAuthenticationFilter();
     }
 }
