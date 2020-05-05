@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,7 +42,7 @@ public class MBAuthenticationProvider implements AuthenticationProvider {
         List<SimpleGrantedAuthority> simpleGrantedAuthorityList = permissionDTOList.stream()
                 .map(item -> new SimpleGrantedAuthority(item.getContent())).collect(Collectors.toList());
         MBAuthenticationToken mbAuthenticationToken = new MBAuthenticationToken(authentication.getPrincipal(),
-                authentication.getPrincipal(), simpleGrantedAuthorityList);
+                null, simpleGrantedAuthorityList);
         mbAuthenticationToken.setDetails(authentication.getDetails());
         return mbAuthenticationToken;
     }
