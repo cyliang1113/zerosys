@@ -9,7 +9,7 @@ public interface CommonConstant {
 	/**
 	 * JSON 资源
 	 */
-	String CONTENT_TYPE = "application/json; charset=utf-8";
+	String CONTENT_TYPE_JSON = "application/json; charset=utf-8";
 
 	/**
 	 * 成功标记

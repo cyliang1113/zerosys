@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.leolab.zerosys.common.constant.CommonConstant.CONTENT_TYPE_JSON;
+
 @Slf4j
 public class MBAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
@@ -20,6 +22,7 @@ public class MBAuthenticationFailureHandler implements AuthenticationFailureHand
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
+        response.setContentType(CONTENT_TYPE_JSON);
         log.info("MBAuthenticationSuccessHandler start ...");
         R<Object> r = new R<>(FailMsgEnum.common_fail);
         r.setMsg(exception.getMessage());

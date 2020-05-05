@@ -9,6 +9,7 @@ import com.leolab.zerosys.services.uc.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -34,7 +35,7 @@ public class MBAuthenticationProvider implements AuthenticationProvider {
         //验证
         R<UserDTO> userDTOR = userService.usernamePasswordVerify(String.valueOf(authentication.getPrincipal()), String.valueOf(authentication.getCredentials()));
         if (!userDTOR.isSuccess()) {
-            throw new InternalAuthenticationServiceException(userDTOR.getMsg());
+            throw new AuthenticationServiceException(userDTOR.getMsg());
         }
         //授权
         UserDTO userDTO = userDTOR.getData();

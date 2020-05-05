@@ -4,6 +4,7 @@ import com.leolab.zerosys.common.constant.FailMsgEnum;
 import com.leolab.zerosys.services.auth.springsecurity.authentication.token.MBAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -32,7 +33,7 @@ public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilt
         logger.info("MBAuthenticationFilter start ...");
 
         if (!request.getMethod().equals(HttpMethod.POST.name())) {
-            throw new InternalAuthenticationServiceException(
+            throw new AuthenticationServiceException(
                     "Authentication request method not supported: " + request.getMethod());
         }
 
@@ -40,7 +41,7 @@ public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilt
         String password =  request.getParameter(PASSWORD);
 
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            throw new InternalAuthenticationServiceException(FailMsgEnum.username_or_password_not_empty.getMsg());
+            throw new AuthenticationServiceException(FailMsgEnum.username_or_password_not_empty.getMsg());
         }
         MBAuthenticationToken mbAuthenticationToken = new MBAuthenticationToken(username, password);
         mbAuthenticationToken.setDetails(authenticationDetailsSource.buildDetails(request));
