@@ -23,7 +23,7 @@ public class MBAuthenticationFailureHandler implements AuthenticationFailureHand
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
         response.setContentType(CONTENT_TYPE_JSON);
-        log.info("MBAuthenticationSuccessHandler start ...");
+        log.info("MBAuthenticationFailureHandler start ...");
         R<Object> r = new R<>(FailMsgEnum.common_fail);
         r.setMsg(exception.getMessage());
         String s = objectMapper.writeValueAsString(r);
