@@ -1,7 +1,7 @@
-package com.leolab.zerosys.services.auth.authentication.provider;
+package com.leolab.zerosys.services.auth.springsecurity.authentication.provider;
 
 import com.leolab.zerosys.common.utils.R;
-import com.leolab.zerosys.services.auth.authentication.token.MBAuthenticationToken;
+import com.leolab.zerosys.services.auth.springsecurity.authentication.token.MBAuthenticationToken;
 import com.leolab.zerosys.services.pm.dto.PermissionDTO;
 import com.leolab.zerosys.services.pm.service.PermissionManageService;
 import com.leolab.zerosys.services.uc.dto.UserDTO;
@@ -9,6 +9,7 @@ import com.leolab.zerosys.services.uc.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,7 +34,7 @@ public class MBAuthenticationProvider implements AuthenticationProvider {
         //验证
         R<UserDTO> userDTOR = userService.usernamePasswordVerify(String.valueOf(authentication.getPrincipal()), String.valueOf(authentication.getCredentials()));
         if (!userDTOR.isSuccess()) {
-            throw new RuntimeException(userDTOR.getMsg());
+            throw new InternalAuthenticationServiceException(userDTOR.getMsg());
         }
         //授权
         UserDTO userDTO = userDTOR.getData();
