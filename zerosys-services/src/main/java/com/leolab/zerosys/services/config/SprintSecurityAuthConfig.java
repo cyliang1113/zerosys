@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 /**
@@ -38,7 +38,7 @@ public class SprintSecurityAuthConfig extends WebSecurityConfigurerAdapter {
             @Override
             public void configure(HttpSecurity http){
                 http.addFilterAfter(createMBAuthenticationFilter(http.getSharedObject(AuthenticationManager.class)),
-                        FilterSecurityInterceptor.class)
+                        UsernamePasswordAuthenticationFilter.class)
                         .authenticationProvider(mBAuthenticationProvider());
             }
         });
