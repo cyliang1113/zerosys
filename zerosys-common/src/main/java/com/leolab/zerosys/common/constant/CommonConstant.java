@@ -17,4 +17,6 @@ public interface CommonConstant {
 	Integer SUCCESS = 10000;
 
 	String SUCCESS_MSG = "成功";
+
+	String ZERO_SYS = "zerosys";
 }

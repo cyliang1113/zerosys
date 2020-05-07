@@ -1,11 +1,10 @@
-package com.leolab.zerosys.services.auth.springsecurity.authentication.filter;
+package com.leolab.zerosys.services.auth.springsecurity.filter;
 
 import com.leolab.zerosys.common.constant.FailMsgEnum;
-import com.leolab.zerosys.services.auth.springsecurity.authentication.token.MBAuthenticationToken;
+import com.leolab.zerosys.services.auth.springsecurity.token.MBAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 管理后台身份认证(登录) Filter
+ * 管理后台身份验证(登录) Filter
  */
 public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     public static final String M_B_AUTHENTICATION_URL = "/mb/authentication"; //管理后台登录url

@@ -1,9 +1,10 @@
-package com.leolab.zerosys.services.auth.springsecurity.authentication.handler;
+package com.leolab.zerosys.services.auth.springsecurity.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leolab.zerosys.common.constant.FailMsgEnum;
 import com.leolab.zerosys.common.utils.R;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -17,16 +18,18 @@ import static com.leolab.zerosys.common.constant.CommonConstant.CONTENT_TYPE_JSO
 @Slf4j
 public class MBAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-        response.setContentType(CONTENT_TYPE_JSON);
+
         log.info("MBAuthenticationFailureHandler start ...");
         R<Object> r = new R<>(FailMsgEnum.common_fail);
         r.setMsg(exception.getMessage());
         String s = objectMapper.writeValueAsString(r);
+        response.setContentType(CONTENT_TYPE_JSON);
         response.getWriter().write(s);
     }
 }

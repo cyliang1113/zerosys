@@ -1,7 +1,7 @@
-package com.leolab.zerosys.services.auth.springsecurity.authentication.provider;
+package com.leolab.zerosys.services.auth.springsecurity.provider;
 
 import com.leolab.zerosys.common.utils.R;
-import com.leolab.zerosys.services.auth.springsecurity.authentication.token.MBAuthenticationToken;
+import com.leolab.zerosys.services.auth.springsecurity.token.MBAuthenticationToken;
 import com.leolab.zerosys.services.pm.dto.PermissionDTO;
 import com.leolab.zerosys.services.pm.service.PermissionManageService;
 import com.leolab.zerosys.services.uc.dto.UserDTO;
@@ -17,6 +17,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 管理后台身份验证提供者
+ */
 @Slf4j
 public class MBAuthenticationProvider implements AuthenticationProvider {
 
