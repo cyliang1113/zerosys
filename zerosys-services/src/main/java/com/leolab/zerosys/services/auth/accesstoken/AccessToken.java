@@ -6,13 +6,13 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Date;
 
+import static com.leolab.zerosys.services.auth.constant.AuthConstant.BEARER_TYPE;
+
 /**
  * 访问令牌
  */
 public class AccessToken implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    public static final String BEARER_TYPE = "Bearer";
 
     @Setter
     @Getter

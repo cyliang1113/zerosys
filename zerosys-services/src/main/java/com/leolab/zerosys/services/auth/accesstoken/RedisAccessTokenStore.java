@@ -30,14 +30,28 @@ public class RedisAccessTokenStore implements AccessTokenStore {
             byte[] serialAuthenticationKey = serializeKey(AUTH + token.getValue());
             byte[] serialAuthentication = serialize(authentication);
             RedisConnection conn = getConnection();
-            conn.set(serialAuthenticationKey, serialAuthentication, Expiration.seconds(token.getExpiresIn()), UPSERT);
-            conn.close();
+            try {
+                conn.set(serialAuthenticationKey, serialAuthentication, Expiration.seconds(token.getExpiresIn()), UPSERT);
+            } catch (Exception e) {
+                conn.close();
+            }
         }
     }
 
     @Override
     public Authentication readAuthentication(String tokenValue) {
-        return null;
+        if (tokenValue == null) {
+            return null;
+        }
+        byte[] bytes = null;
+        RedisConnection conn = getConnection();
+        try {
+            bytes = conn.get(serializeKey(AUTH + tokenValue));
+        } catch (Exception e) {
+            conn.close();
+        }
+        Authentication authentication = deserializeAuthentication(bytes);
+        return authentication;
     }
 
     @Override

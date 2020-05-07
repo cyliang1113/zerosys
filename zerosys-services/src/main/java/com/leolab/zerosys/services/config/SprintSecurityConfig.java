@@ -4,6 +4,7 @@ import com.leolab.zerosys.services.auth.accesstoken.AccessTokenService;
 import com.leolab.zerosys.services.auth.accesstoken.AccessTokenStore;
 import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
 import com.leolab.zerosys.services.auth.accesstoken.RedisAccessTokenStore;
+import com.leolab.zerosys.services.auth.springsecurity.context.RedisSecurityContextRepository;
 import com.leolab.zerosys.services.auth.springsecurity.filter.MBAuthenticationFilter;
 import com.leolab.zerosys.services.auth.springsecurity.handler.MBAuthenticationFailureHandler;
 import com.leolab.zerosys.services.auth.springsecurity.handler.MBAuthenticationSuccessHandler;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 
 /**
@@ -47,6 +49,8 @@ public class SprintSecurityConfig extends WebSecurityConfigurerAdapter {
                         .authenticationProvider(mBAuthenticationProvider());
             }
         });
+
+        http.setSharedObject(SecurityContextRepository.class, redisSecurityContextRepository());
     }
 
     private MBAuthenticationFilter createMBAuthenticationFilter(AuthenticationManager authenticationManager){
@@ -73,12 +77,17 @@ public class SprintSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AccessTokenService accessTokenService() {
+    public DefaultAccessTokenService defaultAccessTokenService() {
         return new DefaultAccessTokenService();
     }
 
     @Bean
-    public AccessTokenStore accessTokenStore(RedisConnectionFactory connectionFactory){
+    public RedisAccessTokenStore redisAccessTokenStore(RedisConnectionFactory connectionFactory){
         return new RedisAccessTokenStore(connectionFactory);
+    }
+
+    @Bean
+    public RedisSecurityContextRepository redisSecurityContextRepository() {
+        return new RedisSecurityContextRepository();
     }
 }

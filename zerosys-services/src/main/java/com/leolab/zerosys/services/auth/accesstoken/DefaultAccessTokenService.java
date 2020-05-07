@@ -14,7 +14,7 @@ public class DefaultAccessTokenService implements AccessTokenService {
     private Integer accessTokenValiditySeconds;
 
     @Autowired
-    private AccessTokenStore accessTokenStore;
+    private RedisAccessTokenStore redisAccessTokenStore;
 
     @Override
     public AccessToken createAccessToken(Authentication authentication) throws AuthenticationException {
@@ -22,7 +22,7 @@ public class DefaultAccessTokenService implements AccessTokenService {
         AccessToken accessToken = new AccessToken(UUID.randomUUID().toString(),
                 new Date(System.currentTimeMillis() + (getAccessTokenValiditySeconds() * 1000L)));
         //保存 access token
-        accessTokenStore.storeAccessToken(accessToken, authentication);
+        redisAccessTokenStore.storeAccessToken(accessToken, authentication);
 
         return accessToken;
     }
