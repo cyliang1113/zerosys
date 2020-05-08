@@ -1,9 +1,8 @@
 package com.leolab.zerosys.services.config;
 
-import com.leolab.zerosys.services.auth.accesstoken.AccessTokenService;
-import com.leolab.zerosys.services.auth.accesstoken.AccessTokenStore;
 import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
 import com.leolab.zerosys.services.auth.accesstoken.RedisAccessTokenStore;
+import com.leolab.zerosys.services.auth.springsecurity.accessdecision.UrlAccessDecisionManager;
 import com.leolab.zerosys.services.auth.springsecurity.context.RedisSecurityContextRepository;
 import com.leolab.zerosys.services.auth.springsecurity.filter.MBAuthenticationFilter;
 import com.leolab.zerosys.services.auth.springsecurity.handler.MBAuthenticationFailureHandler;
@@ -12,6 +11,7 @@ import com.leolab.zerosys.services.auth.springsecurity.provider.MBAuthentication
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
@@ -51,6 +51,7 @@ public class SprintSecurityConfig extends WebSecurityConfigurerAdapter {
         });
 
         http.setSharedObject(SecurityContextRepository.class, redisSecurityContextRepository());
+        http.setSharedObject(AccessDecisionManager.class, accessDecisionManager());
     }
 
     private MBAuthenticationFilter createMBAuthenticationFilter(AuthenticationManager authenticationManager){
@@ -89,5 +90,10 @@ public class SprintSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RedisSecurityContextRepository redisSecurityContextRepository() {
         return new RedisSecurityContextRepository();
+    }
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        return new UrlAccessDecisionManager();
     }
 }

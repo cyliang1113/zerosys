@@ -5,4 +5,6 @@ import org.springframework.security.core.AuthenticationException;
 
 public interface AccessTokenService {
     AccessToken createAccessToken(Authentication authentication) throws AuthenticationException;
+
+    Authentication loadAuthentication(String accessTokenValue) throws AuthenticationException;
 }

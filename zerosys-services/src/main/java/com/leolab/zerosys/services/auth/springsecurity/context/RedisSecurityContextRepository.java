@@ -1,7 +1,6 @@
 package com.leolab.zerosys.services.auth.springsecurity.context;
 
-import com.leolab.zerosys.services.auth.accesstoken.AccessTokenStore;
-import com.leolab.zerosys.services.auth.accesstoken.RedisAccessTokenStore;
+import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
 import com.leolab.zerosys.services.auth.util.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,9 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class RedisSecurityContextRepository implements SecurityContextRepository {
-
     @Autowired
-    private RedisAccessTokenStore redisAccessTokenStore;
+    private DefaultAccessTokenService defaultAccessTokenService;
 
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
@@ -24,7 +22,7 @@ public class RedisSecurityContextRepository implements SecurityContextRepository
         String tokenValue = AuthUtils.extractHttpHeaderBearerAuthorization(request);
         Authentication authentication = null;
         if (tokenValue != null) {
-            authentication = redisAccessTokenStore.readAuthentication(tokenValue);
+            authentication = defaultAccessTokenService.loadAuthentication(tokenValue);
         }
         SecurityContext emptyContext = SecurityContextHolder.createEmptyContext();
         if (authentication != null) {
@@ -40,6 +38,6 @@ public class RedisSecurityContextRepository implements SecurityContextRepository
 
     @Override
     public boolean containsContext(HttpServletRequest request) {
-        return false;
+        return true;
     }
 }

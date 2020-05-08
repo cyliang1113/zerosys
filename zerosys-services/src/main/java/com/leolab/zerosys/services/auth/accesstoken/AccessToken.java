@@ -34,4 +34,8 @@ public class AccessToken implements Serializable {
         return expiration != null ? Long.valueOf((expiration.getTime() - System.currentTimeMillis()) / 1000L)
                 .intValue() : 0;
     }
+
+    public boolean isExpired() {
+        return expiration != null && expiration.before(new Date());
+    }
 }

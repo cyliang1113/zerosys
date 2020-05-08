@@ -27,6 +27,15 @@ public class DefaultAccessTokenService implements AccessTokenService {
         return accessToken;
     }
 
+    @Override
+    public Authentication loadAuthentication(String accessTokenValue) throws AuthenticationException {
+        Authentication authentication = redisAccessTokenStore.readAuthentication(accessTokenValue);
+        if (authentication == null) {
+            return null;
+        }
+        return authentication;
+    }
+
     public void setAccessTokenValiditySeconds(int accessTokenValiditySeconds) {
         this.accessTokenValiditySeconds = accessTokenValiditySeconds;
     }

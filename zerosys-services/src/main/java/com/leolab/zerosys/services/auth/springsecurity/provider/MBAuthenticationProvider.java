@@ -1,6 +1,7 @@
 package com.leolab.zerosys.services.auth.springsecurity.provider;
 
 import com.leolab.zerosys.common.utils.R;
+import com.leolab.zerosys.services.auth.springsecurity.authority.UrlGrantedAuthority;
 import com.leolab.zerosys.services.auth.springsecurity.token.MBAuthenticationToken;
 import com.leolab.zerosys.services.pm.dto.PermissionDTO;
 import com.leolab.zerosys.services.pm.service.PermissionManageService;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,10 +42,10 @@ public class MBAuthenticationProvider implements AuthenticationProvider {
         //授权
         UserDTO userDTO = userDTOR.getData();
         List<PermissionDTO> permissionDTOList = permissionManageService.getInterfacePermissionListByUserId(userDTO.getId());
-        List<SimpleGrantedAuthority> simpleGrantedAuthorityList = permissionDTOList.stream()
-                .map(item -> new SimpleGrantedAuthority(item.getContent())).collect(Collectors.toList());
+        List<UrlGrantedAuthority> urlGrantedAuthorities = permissionDTOList.stream()
+                .map(item -> new UrlGrantedAuthority(item.getContent())).collect(Collectors.toList());
         MBAuthenticationToken mbAuthenticationToken = new MBAuthenticationToken(authentication.getPrincipal(),
-                null, simpleGrantedAuthorityList);
+                null, urlGrantedAuthorities);
         mbAuthenticationToken.setDetails(authentication.getDetails());
         return mbAuthenticationToken;
     }
