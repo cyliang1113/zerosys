@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 用户中心 用户表 服务实现类
@@ -59,6 +62,14 @@ public class UserServiceImpl implements UserService {
             }
         }
         return new R(FailMsgEnum.username_or_password_mistake);
+    }
+
+    @Override
+    public List<UserDTO> userList() {
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        List<User> users = userMapper.selectList(wrapper);
+        List<UserDTO> userDTOS = users.stream().map(item -> BeanUtils.copyObject(item, UserDTO.class)).collect(Collectors.toList());
+        return userDTOS;
     }
 
     private User getUserByUsernameInner(String username) {

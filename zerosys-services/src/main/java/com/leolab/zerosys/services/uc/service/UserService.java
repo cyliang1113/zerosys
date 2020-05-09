@@ -3,6 +3,8 @@ package com.leolab.zerosys.services.uc.service;
 import com.leolab.zerosys.common.utils.R;
 import com.leolab.zerosys.services.uc.dto.UserDTO;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户中心 用户表 服务类
@@ -16,4 +18,6 @@ public interface UserService {
     UserDTO getUserByUsername(String username);
 
     R<UserDTO> usernamePasswordVerify(String username, String password);
+
+    List<UserDTO> userList();
 }

@@ -34,7 +34,7 @@ public class MBAuthenticationSuccessHandler implements AuthenticationSuccessHand
         log.info("MBAuthenticationSuccessHandler start ...");
 
         //权限列表
-        log.info("用户: {}, 权限列表: {}", authentication.getPrincipal(), authentication.getAuthorities());
+        log.info("MBAuthenticationSuccessHandler 用户: {}, 权限列表: {}", authentication.getPrincipal(), authentication.getAuthorities());
 
         AccessToken accessToken = defaultAccessTokenService.createAccessToken(authentication);
 
