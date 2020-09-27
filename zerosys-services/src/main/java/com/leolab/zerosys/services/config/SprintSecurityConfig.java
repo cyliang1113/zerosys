@@ -4,10 +4,10 @@ import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
 import com.leolab.zerosys.services.auth.accesstoken.RedisAccessTokenStore;
 import com.leolab.zerosys.services.auth.springsecurity.accessdecision.UrlAccessDecisionVoter;
 import com.leolab.zerosys.services.auth.springsecurity.context.RedisSecurityContextRepository;
-import com.leolab.zerosys.services.auth.springsecurity.filter.MBAuthenticationFilter;
-import com.leolab.zerosys.services.auth.springsecurity.handler.MBAuthenticationFailureHandler;
-import com.leolab.zerosys.services.auth.springsecurity.handler.MBAuthenticationSuccessHandler;
-import com.leolab.zerosys.services.auth.springsecurity.provider.MBAuthenticationProvider;
+import com.leolab.zerosys.services.auth.springsecurity.filter.MBLoginFilter;
+import com.leolab.zerosys.services.auth.springsecurity.handler.MBLoginFailureHandler;
+import com.leolab.zerosys.services.auth.springsecurity.handler.MBLoginSuccessHandler;
+import com.leolab.zerosys.services.auth.springsecurity.provider.MBLoginProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -58,27 +58,27 @@ public class SprintSecurityConfig extends WebSecurityConfigurerAdapter {
         http.setSharedObject(SecurityContextRepository.class, redisSecurityContextRepository());
     }
 
-    private MBAuthenticationFilter createMBAuthenticationFilter(AuthenticationManager authenticationManager){
-        MBAuthenticationFilter mbAuthenticationFilter = new MBAuthenticationFilter();
-        mbAuthenticationFilter.setAuthenticationManager(authenticationManager);
-        mbAuthenticationFilter.setAuthenticationSuccessHandler(mBAuthenticationSuccessHandler());
-        mbAuthenticationFilter.setAuthenticationFailureHandler(mBAuthenticationFailureHandler());
-        return mbAuthenticationFilter;
+    private MBLoginFilter createMBAuthenticationFilter(AuthenticationManager authenticationManager){
+        MBLoginFilter mbLoginFilter = new MBLoginFilter();
+        mbLoginFilter.setAuthenticationManager(authenticationManager);
+        mbLoginFilter.setAuthenticationSuccessHandler(mBAuthenticationSuccessHandler());
+        mbLoginFilter.setAuthenticationFailureHandler(mBAuthenticationFailureHandler());
+        return mbLoginFilter;
     }
 
     @Bean
     public AuthenticationProvider mBAuthenticationProvider() {
-        return new MBAuthenticationProvider();
+        return new MBLoginProvider();
     }
 
     @Bean
-    public MBAuthenticationSuccessHandler mBAuthenticationSuccessHandler() {
-        return new MBAuthenticationSuccessHandler();
+    public MBLoginSuccessHandler mBAuthenticationSuccessHandler() {
+        return new MBLoginSuccessHandler();
     }
 
     @Bean
-    public MBAuthenticationFailureHandler mBAuthenticationFailureHandler() {
-        return new MBAuthenticationFailureHandler();
+    public MBLoginFailureHandler mBAuthenticationFailureHandler() {
+        return new MBLoginFailureHandler();
     }
 
     @Bean

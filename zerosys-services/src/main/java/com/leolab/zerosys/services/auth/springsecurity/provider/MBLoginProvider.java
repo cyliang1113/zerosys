@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 管理后台身份验证提供者
+ * 管理后台登录 提供者
  */
 @Slf4j
-public class MBAuthenticationProvider implements AuthenticationProvider {
+public class MBLoginProvider implements AuthenticationProvider {
 
     @Autowired
     private UserService userService;
@@ -32,18 +32,20 @@ public class MBAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.info("MBAuthenticationProvider start ...");
+        log.info("MBLoginProvider start ...");
 
-        //验证
+        //用户名密码验证
         R<UserDTO> userDTOR = userService.usernamePasswordVerify(String.valueOf(authentication.getPrincipal()), String.valueOf(authentication.getCredentials()));
         if (!userDTOR.isSuccess()) {
             throw new AuthenticationServiceException(userDTOR.getMsg());
         }
-        //授权
+
         UserDTO userDTO = userDTOR.getData();
+        //权限列表
         List<PermissionDTO> permissionDTOList = permissionManageService.getInterfacePermissionListByUserId(userDTO.getId());
         List<UrlGrantedAuthority> urlGrantedAuthorities = permissionDTOList.stream()
                 .map(item -> new UrlGrantedAuthority(item.getContent())).collect(Collectors.toList());
+        //管理后台token
         MBAuthenticationToken mbAuthenticationToken = new MBAuthenticationToken(authentication.getPrincipal(),
                 null, urlGrantedAuthorities);
         mbAuthenticationToken.setDetails(authentication.getDetails());

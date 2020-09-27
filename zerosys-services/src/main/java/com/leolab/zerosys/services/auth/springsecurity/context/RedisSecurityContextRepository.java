@@ -12,6 +12,10 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * SecurityContextPersistenceFilter调用loadContext
+ * 通过token获取用户权限
+ */
 public class RedisSecurityContextRepository implements SecurityContextRepository {
     @Autowired
     private DefaultAccessTokenService defaultAccessTokenService;
@@ -19,10 +23,10 @@ public class RedisSecurityContextRepository implements SecurityContextRepository
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
         HttpServletRequest request = requestResponseHolder.getRequest();
-        String tokenValue = AuthUtils.extractHttpHeaderBearerAuthorization(request);
+        String token = AuthUtils.extractHttpHeaderBearerAuthorization(request);
         Authentication authentication = null;
-        if (tokenValue != null) {
-            authentication = defaultAccessTokenService.loadAuthentication(tokenValue);
+        if (token != null) {
+            authentication = defaultAccessTokenService.loadAuthentication(token);
         }
         SecurityContext emptyContext = SecurityContextHolder.createEmptyContext();
         if (authentication != null) {

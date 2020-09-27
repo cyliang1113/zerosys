@@ -14,26 +14,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 管理后台身份验证(登录) Filter
+ * 管理后台登录(身份验证)Filter
  */
-public class MBAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    public static final String M_B_AUTHENTICATION_URL = "/mb/authentication"; //管理后台登录url
+public class MBLoginFilter extends AbstractAuthenticationProcessingFilter {
+    public static final String M_B_LOGIN_URL = "/mb/login"; //管理后台登录url
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
 
 
-    public MBAuthenticationFilter() {
-        super(new AntPathRequestMatcher(M_B_AUTHENTICATION_URL, "POST"));
+    public MBLoginFilter() {
+        super(new AntPathRequestMatcher(M_B_LOGIN_URL));
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-        logger.info("MBAuthenticationFilter start ...");
+        logger.info("MBLoginFilter start ...");
 
         if (!request.getMethod().equals(HttpMethod.POST.name())) {
             throw new AuthenticationServiceException(
-                    "Authentication request method not supported: " + request.getMethod());
+                    "MBLogin request method not supported: " + request.getMethod());
         }
 
         String username = request.getParameter(USERNAME);

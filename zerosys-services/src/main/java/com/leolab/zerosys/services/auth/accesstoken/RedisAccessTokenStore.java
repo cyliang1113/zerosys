@@ -39,14 +39,14 @@ public class RedisAccessTokenStore implements AccessTokenStore {
     }
 
     @Override
-    public Authentication readAuthentication(String tokenValue) {
-        if (tokenValue == null) {
+    public Authentication readAuthentication(String token) {
+        if (token == null) {
             return null;
         }
         byte[] bytes = null;
         RedisConnection conn = getConnection();
         try {
-            bytes = conn.get(serializeKey(AUTH + tokenValue));
+            bytes = conn.get(serializeKey(AUTH + token));
         } catch (Exception e) {
             conn.close();
         }
@@ -55,9 +55,10 @@ public class RedisAccessTokenStore implements AccessTokenStore {
     }
 
     @Override
-    public void removeAccessToken(String tokenValue) {
+    public void removeAccessToken(String token) {
 
     }
+
     private byte[] serializeKey(String key) {
         if (key == null) {
             return EMPTY_ARRAY;

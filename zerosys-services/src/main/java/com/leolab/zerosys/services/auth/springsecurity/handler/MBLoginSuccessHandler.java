@@ -17,10 +17,10 @@ import java.io.IOException;
 import static com.leolab.zerosys.common.constant.CommonConstant.CONTENT_TYPE_JSON;
 
 /**
- * 管理后台身份认证成功 处理者
+ * 管理后登录成功 处理者
  */
 @Slf4j
-public class MBAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class MBLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -31,10 +31,10 @@ public class MBAuthenticationSuccessHandler implements AuthenticationSuccessHand
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        log.info("MBAuthenticationSuccessHandler start ...");
+        log.info("MBLoginSuccessHandler start ...");
 
         //权限列表
-        log.info("MBAuthenticationSuccessHandler 用户: {}, 权限列表: {}", authentication.getPrincipal(), authentication.getAuthorities());
+        log.info("MBLoginSuccessHandler 用户: {}, 权限列表: {}", authentication.getPrincipal(), authentication.getAuthorities());
 
         AccessToken accessToken = defaultAccessTokenService.createAccessToken(authentication);
 

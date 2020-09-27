@@ -28,8 +28,8 @@ public class DefaultAccessTokenService implements AccessTokenService {
     }
 
     @Override
-    public Authentication loadAuthentication(String accessTokenValue) throws AuthenticationException {
-        Authentication authentication = redisAccessTokenStore.readAuthentication(accessTokenValue);
+    public Authentication loadAuthentication(String accessToken) throws AuthenticationException {
+        Authentication authentication = redisAccessTokenStore.readAuthentication(accessToken);
         if (authentication == null) {
             return null;
         }
