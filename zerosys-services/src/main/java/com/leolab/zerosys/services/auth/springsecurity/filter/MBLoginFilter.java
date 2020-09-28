@@ -31,10 +31,10 @@ public class MBLoginFilter extends AbstractAuthenticationProcessingFilter {
                                                 HttpServletResponse response) throws AuthenticationException {
         logger.info("MBLoginFilter start ...");
 
-        if (!request.getMethod().equals(HttpMethod.POST.name())) {
-            throw new AuthenticationServiceException(
-                    "MBLogin request method not supported: " + request.getMethod());
-        }
+//        if (!request.getMethod().equals(HttpMethod.POST.name())) {
+//            throw new AuthenticationServiceException(
+//                    "MBLogin request method not supported: " + request.getMethod());
+//        }
 
         String username = request.getParameter(USERNAME);
         String password =  request.getParameter(PASSWORD);
