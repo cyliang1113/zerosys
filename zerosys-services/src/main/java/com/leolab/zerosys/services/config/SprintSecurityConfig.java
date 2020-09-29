@@ -1,14 +1,15 @@
 package com.leolab.zerosys.services.config;
 
+import com.leolab.zerosys.services.auth.accesstoken.AccessTokenService;
+import com.leolab.zerosys.services.auth.accesstoken.AccessTokenStore;
 import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
 import com.leolab.zerosys.services.auth.accesstoken.RedisAccessTokenStore;
 import com.leolab.zerosys.services.auth.springsecurity.accessdecision.UrlAccessDecisionVoter;
-import com.leolab.zerosys.services.auth.springsecurity.context.RedisSecurityContextRepository;
+import com.leolab.zerosys.services.auth.springsecurity.context.DefaultSecurityContextRepository;
 import com.leolab.zerosys.services.auth.springsecurity.filter.MBLoginFilter;
 import com.leolab.zerosys.services.auth.springsecurity.handler.MBLoginFailureHandler;
 import com.leolab.zerosys.services.auth.springsecurity.handler.MBLoginSuccessHandler;
 import com.leolab.zerosys.services.auth.springsecurity.provider.MBLoginProvider;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -22,9 +23,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
@@ -59,7 +57,7 @@ public class SprintSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         });
 
-        http.setSharedObject(SecurityContextRepository.class, redisSecurityContextRepository());
+        http.setSharedObject(SecurityContextRepository.class, securityContextRepository());
     }
 
     private MBLoginFilter createMBAuthenticationFilter(AuthenticationManager authenticationManager){
@@ -86,31 +84,17 @@ public class SprintSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DefaultAccessTokenService defaultAccessTokenService() {
+    public AccessTokenService accessTokenService() {
         return new DefaultAccessTokenService();
     }
 
     @Bean
-    public RedisAccessTokenStore redisAccessTokenStore(RedisConnectionFactory connectionFactory){
+    public AccessTokenStore accessTokenStore(RedisConnectionFactory connectionFactory){
         return new RedisAccessTokenStore(connectionFactory);
     }
 
     @Bean
-    public RedisSecurityContextRepository redisSecurityContextRepository() {
-        return new RedisSecurityContextRepository();
-    }
-
-    @Bean
-    public FilterRegistrationBean corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config); // CORS 配置对所有接口都有效
-        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
-        bean.setOrder(Integer.MIN_VALUE);
-        return bean;
+    public SecurityContextRepository securityContextRepository() {
+        return new DefaultSecurityContextRepository();
     }
 }

@@ -1,5 +1,6 @@
 package com.leolab.zerosys.services.auth.springsecurity.context;
 
+import com.leolab.zerosys.services.auth.accesstoken.AccessTokenService;
 import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
 import com.leolab.zerosys.services.auth.util.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ import javax.servlet.http.HttpServletResponse;
  * SecurityContextPersistenceFilter调用loadContext
  * 通过token获取用户权限
  */
-public class RedisSecurityContextRepository implements SecurityContextRepository {
+public class DefaultSecurityContextRepository implements SecurityContextRepository {
     @Autowired
-    private DefaultAccessTokenService defaultAccessTokenService;
+    private AccessTokenService accessTokenService;
 
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
@@ -26,7 +27,7 @@ public class RedisSecurityContextRepository implements SecurityContextRepository
         String token = AuthUtils.extractHttpHeaderBearerAuthorization(request);
         Authentication authentication = null;
         if (token != null) {
-            authentication = defaultAccessTokenService.loadAuthentication(token);
+            authentication = accessTokenService.loadAuthentication(token);
         }
         SecurityContext emptyContext = SecurityContextHolder.createEmptyContext();
         if (authentication != null) {
