@@ -1,7 +1,6 @@
 package com.leolab.zerosys.services.auth.springsecurity.context;
 
 import com.leolab.zerosys.services.auth.accesstoken.AccessTokenService;
-import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
 import com.leolab.zerosys.services.auth.util.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

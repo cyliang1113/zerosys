@@ -3,7 +3,7 @@ package com.leolab.zerosys.services.auth.springsecurity.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leolab.zerosys.common.utils.R;
 import com.leolab.zerosys.services.auth.accesstoken.AccessToken;
-import com.leolab.zerosys.services.auth.accesstoken.DefaultAccessTokenService;
+import com.leolab.zerosys.services.auth.accesstoken.AccessTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,7 +26,7 @@ public class MBLoginSuccessHandler implements AuthenticationSuccessHandler {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private DefaultAccessTokenService defaultAccessTokenService;
+    private AccessTokenService accessTokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -36,7 +36,7 @@ public class MBLoginSuccessHandler implements AuthenticationSuccessHandler {
         //权限列表
         log.info("MBLoginSuccessHandler 用户: {}, 权限列表: {}", authentication.getPrincipal(), authentication.getAuthorities());
 
-        AccessToken accessToken = defaultAccessTokenService.createAccessToken(authentication);
+        AccessToken accessToken = accessTokenService.createAccessToken(authentication);
 
         response.setContentType(CONTENT_TYPE_JSON);
         response.getWriter().write(objectMapper.writeValueAsString(new R<>(accessToken)));
